@@ -1,1 +1,1 @@
-web: gunicorn wgi:app
+web:gunicorn SiteTracker:app
