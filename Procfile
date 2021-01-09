@@ -1,1 +1,1 @@
-web: gunicorn SiteTracker:app
+web: gunicorn -b 127.0.0.1:8000 SiteTracker:app

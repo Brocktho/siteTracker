@@ -3,8 +3,10 @@ from flask_cors import CORS
 import time
 import webbrowser
 import db
+import os
 
 app = Flask(__name__)
+secret = os.urandom(16)
 url_timestamp = {}
 url_viewtime = {}
 prev_url = ""
@@ -79,7 +81,3 @@ def home():
     global url_viewtime
     return jsonify({
         url_viewtime})
-
-
-
-app.run(host='https://sitetracking9126.herokuapp.com/')
