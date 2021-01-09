@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import time
 import webbrowser
 import db
@@ -11,6 +12,7 @@ start_date = time.ctime()
 start_day_number = start_date.split()[2]
 start = True
 inital = None
+CORS(app)
 
 def url_strip(url):
     if "http://" in url or "https://" in url:
@@ -18,7 +20,7 @@ def url_strip(url):
     if "/" in url:
         url = url.split("/", 1)[0]
     if "." in url:
-        url = url.replace(".","")
+        url = url.replace(".","_")
     return url
 
 @app.route('/send_url', methods=['POST'])
