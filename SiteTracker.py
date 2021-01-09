@@ -66,7 +66,7 @@ def send_url():
         initial = initial.inserted_id
         start = False
     else:
-        db.user_collection.find_and_modify({"date",""})
+        db.user_collection.find_and_modify(query={"date","Websites"}, update={current_date,url_viewtime})
     
     return jsonify({'message': 'success!'}), 200
 
