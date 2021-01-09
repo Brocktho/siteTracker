@@ -67,7 +67,7 @@ def send_url():
         print(initial)
         start = False
     else:
-        user_collection.find_and_modify(query=['date','Websites'], update=[current_date,url_viewtime])
+        user_collection.update({"_id": initial}, {"date": current_date, "Websites":url_viewtime})
     
     return jsonify({'message': 'success!'}), 200
 
