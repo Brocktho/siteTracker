@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import time
 import webbrowser
-import db
+from db import user_collection
 import os
 
 app = Flask(__name__)
@@ -62,11 +62,12 @@ def send_url():
     all_data = {"date" : current_date, "Websites":url_viewtime}
     global initial
     if start:
-        initial = db.user_collection.insert_one(all_data)
+        initial = user_collection.insert_one(all_data)
         initial = initial.inserted_id
+        print(initial)
         start = False
     else:
-        db.user_collection.find_and_modify(query={"date","Websites"}, update={current_date,url_viewtime})
+        user_collection.find_and_modify(query={initial}, update={current_date,url_viewtime})
     
     return jsonify({'message': 'success!'}), 200
 
