@@ -43,7 +43,7 @@ def send_url():
     if parent_url not in url_timestamp.keys():
         url_viewtime[parent_url] = 0
     else:
-        if url_viewtime[parent_url] >= 2000:
+        if url_viewtime[parent_url] >= 200:
             webbrowser.open('https://psugroupfind.herokuapp.com/')
     if prev_url != '':
         time_spent = int(time.time() - url_timestamp[prev_url])
