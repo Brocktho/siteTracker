@@ -72,7 +72,7 @@ def quit_url():
     print("URL closed: " + resp_json.decode())
     return jsonify({'message': 'quit success!'}), 200
 
-@app.rout('/home', methods=["GET"])
+@app.route('/home', methods=["GET"])
 def home():
     global url_viewtime
     return url_viewtime
