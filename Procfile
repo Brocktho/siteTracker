@@ -1,1 +1,1 @@
-web: gunicornpip SiteTracker:app
+web: gunicorn SiteTracker:app
