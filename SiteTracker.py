@@ -58,7 +58,7 @@ def send_url():
     url_timestamp[parent_url] = x
     prev_url = parent_url
     print("final timestamps: ", url_timestamp)
-    print("final vietimes: ", url_viewtime)
+    print("final viewtimes: ", url_viewtime)
     all_data = {"date" : current_date, "Websites":url_viewtime}
     global initial
     if start:
