@@ -77,8 +77,9 @@ def quit_url():
 @app.route('/home', methods=["GET"])
 def home():
     global url_viewtime
-    return url_viewtime
+    return jsonify({
+        url_viewtime})
 
 
 
-app.run()
+app.run(threaded=True, port=5000)
