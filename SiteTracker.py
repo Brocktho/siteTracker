@@ -75,7 +75,7 @@ def quit_url():
 @app.route('/home', methods=["GET"])
 def home():
     global url_viewtime
-    
+    return url_viewtime
 
 
 
