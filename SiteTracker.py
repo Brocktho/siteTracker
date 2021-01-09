@@ -67,7 +67,7 @@ def send_url():
         print(initial)
         start = False
     else:
-        user_collection.find_and_modify(query={initial}, update={current_date,url_viewtime})
+        user_collection.find_and_modify(query=initial, update={current_date,url_viewtime})
     
     return jsonify({'message': 'success!'}), 200
 
@@ -80,5 +80,5 @@ def quit_url():
 @app.route('/home', methods=["GET"])
 def home():
     global url_viewtime
-    return jsonify({
+    return jsonify({'message':
         url_viewtime})
