@@ -4,6 +4,7 @@ import time
 import webbrowser
 from db import user_collection
 import os
+from dataStructures import Node, Queue
 
 app = Flask(__name__)
 secret = os.urandom(16)
@@ -12,9 +13,10 @@ url_viewtime = {}
 prev_url = ""
 start_date = time.ctime()
 start_day_number = start_date.split()[2]
-start = True
 inital = None
+q = Queue()
 CORS(app)
+
 
 def url_strip(url):
     if "http://" in url or "https://" in url:
@@ -27,24 +29,23 @@ def url_strip(url):
 
 @app.route('/send_url', methods=['POST'])
 def send_url():
-    global start
+    global q
+    global url_timestamp
+    global url_viewtime
+    global prev_url
+    global initial
     current_date = time.ctime()
     current_day_number = current_date.split()[2]
     resp_json = request.get_data()
     params = resp_json.decode()
     url = params.replace("url=", "")
     parent_url = url_strip(url)
-    print("currently viewing: " + parent_url)
-
-    global url_timestamp
-    global url_viewtime
-    global prev_url
+    first = Node('print("currently viewing: " + parent_url)')
+    q.enqueue(first)
 
     if parent_url not in url_timestamp.keys():
         url_viewtime[parent_url] = 0
-    else:
-        if url_viewtime[parent_url] >= 200:
-            webbrowser.open('https://psugroupfind.herokuapp.com/')
+
     if prev_url != '':
         time_spent = int(time.time() - url_timestamp[prev_url])
         url_viewtime[prev_url] = url_viewtime[prev_url] + time_spent
@@ -57,17 +58,22 @@ def send_url():
     x = int(time.time())
     url_timestamp[parent_url] = x
     prev_url = parent_url
-    print("final timestamps: ", url_timestamp)
-    print("final viewtimes: ", url_viewtime)
+    second = Node('print("final timestamps: ", url_timestamp)')
+    q.enqueue(second)
+    third = Node('print("final viewtimes: ", url_viewtime)')
+    q.enqueue(third)
     all_data = {"date" : current_date, "Websites":url_viewtime}
-    global initial
     if start:
-        initial = user_collection.insert_one(all_data)
-        initial = initial.inserted_id
-        print(initial)
+        fourth = Node('user_collection.insert_one(all_data)')
+        q.enqueue(fourth)
+        initial = Node('fourth.value.inserted_id')
+        q.enqueue(initial)
         start = False
     else:
-        user_collection.update({"_id": initial}, {"date": current_date, "Websites":url_viewtime})
+        fourth = Node('user_collection.update({"_id": initial}, {"date": current_date, "Websites":url_viewtime})')
+        q.enqueue(fourth)
+    while len(q) != 0:
+        exec(q.dequeue().value)
     
     return jsonify({'message': 'success!'}), 200
 
