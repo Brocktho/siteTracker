@@ -75,7 +75,7 @@ def send_url():
         fourth = Node('user_collection.update({"_id": initial}, {"date": current_date, "Websites":url_viewtime})')
         q.enqueue(fourth)
     while len(q) != 0:
-        exec(q.dequeue().value)
+        exec(q.dequeue())
     
     return jsonify({'message': 'success!'}), 200
 
