@@ -70,8 +70,8 @@ def send_url():
     if start:
         fourth = Node('user_collection.insert_one(all_data)')
         q.enqueue(fourth)
-        initial = Node('hold.inserted_id')
-        q.enqueue(initial)
+        fifth = Node('hold.inserted_id')
+        q.enqueue(fifth)
         start = False
     else:
         fourth = Node('user_collection.update({"_id": initial}, {"date": current_date, "Websites":url_viewtime})')
