@@ -15,6 +15,7 @@ start_date = time.ctime()
 start_day_number = start_date.split()[2]
 start = True
 inital = None
+hold = None
 q = Queue()
 CORS(app)
 
@@ -36,6 +37,7 @@ def send_url():
     global prev_url
     global initial
     global start
+    global hold
     current_date = time.ctime()
     current_day_number = current_date.split()[2]
     resp_json = request.get_data()
@@ -68,14 +70,19 @@ def send_url():
     if start:
         fourth = Node('user_collection.insert_one(all_data)')
         q.enqueue(fourth)
-        initial = Node('fourth.value.inserted_id')
+        initial = Node('hold.inserted_id')
         q.enqueue(initial)
         start = False
     else:
         fourth = Node('user_collection.update({"_id": initial}, {"date": current_date, "Websites":url_viewtime})')
         q.enqueue(fourth)
     while len(q) != 0:
-        exec(q.dequeue())
+        current = exec(q.dequeue())
+        if current == hold.inserted_id:
+            initial = current
+        hold = current
+
+        
     
     return jsonify({'message': 'success!'}), 200
 
