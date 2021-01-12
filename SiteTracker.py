@@ -13,6 +13,7 @@ url_viewtime = {}
 prev_url = ""
 start_date = time.ctime()
 start_day_number = start_date.split()[2]
+start = True
 inital = None
 q = Queue()
 CORS(app)
@@ -34,6 +35,7 @@ def send_url():
     global url_viewtime
     global prev_url
     global initial
+    global start
     current_date = time.ctime()
     current_day_number = current_date.split()[2]
     resp_json = request.get_data()
@@ -50,7 +52,7 @@ def send_url():
         time_spent = int(time.time() - url_timestamp[prev_url])
         url_viewtime[prev_url] = url_viewtime[prev_url] + time_spent
     
-    if int(current_day_number) < int(start_day_number):
+    if int(current_day_number) > int(start_day_number):
         for key in url_viewtime:
             url_viewtime[key] = 0
         start = True
