@@ -78,6 +78,7 @@ def send_url():
         q.enqueue(fourth)
     while len(q) != 0:
         current = exec(q.dequeue())
+        print(current)
         if current == hold.inserted_id:
             initial = current
         hold = current
