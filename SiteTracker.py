@@ -31,7 +31,7 @@ def url_strip(url):
         url = url.replace(".","_")
     return url
 
-@app.route('/send_url', methods=['POST'])
+@view.route('/send_url', methods=['POST'])
 def send_url():
     global q
     global url_timestamp
@@ -75,13 +75,13 @@ def send_url():
 
     return jsonify({'message': 'success!'}), 200
 
-@app.route('/quit_url', methods=["POST"])
+@view.route('/quit_url', methods=["POST"])
 def quit_url():
     resp_json = request.get_data()
     print("URL closed: " + resp_json.decode())
     return jsonify({'message': 'quit success!'}), 200
 
-@app.route('/home', methods=["GET"])
+@view.route('/home', methods=["GET"])
 def home():
     global url_viewtime
     return jsonify({'message':
