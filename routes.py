@@ -3,7 +3,7 @@ from flask import current_app as app
 from flask_cors import CORS
 import time
 import webbrowser
-from db import user_collection
+
 import os
 from dataStructures import Node, Queue
 
@@ -67,11 +67,11 @@ def send_url():
     print("final viewtimes: ", url_viewtime)
     all_data = {"date" : current_date, "Websites":url_viewtime}
     if start:
-        hold = user_collection.insert_one(all_data)
+        hold = app.db.insert_one(all_data)
         initial = hold.inserted_id
         start = False
     else:
-        user_collection.update({"_id": initial}, {"date": current_date, "Websites":url_viewtime})
+        app.db.update({"_id": initial}, {"date": current_date, "Websites":url_viewtime})
 
     return jsonify({'message': 'success!'}), 200
 
