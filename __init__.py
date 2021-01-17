@@ -11,8 +11,7 @@ def create_app(testing=False):
     # .util file is something i don't understand at this moment, so we have unused variable here.
     flask_env = os.getenv("FLASK_ENV", None)
 
-    with app.app_context():
-        from SiteTrackerDb.SiteTracker import view
-        app.register_blueprint(view)
+    from SiteTrackerDb.SiteTracker import view
+    app.register_blueprint(view)
 
     return app
