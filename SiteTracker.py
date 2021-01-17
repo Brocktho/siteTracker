@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, request
+from flask import Blueprint, render_template, jsonify, request
+from flask import current_app as app
 from flask_cors import CORS
 import time
 import webbrowser
@@ -6,7 +7,8 @@ from db import user_collection
 import os
 from dataStructures import Node, Queue
 
-app = Flask(__name__)
+
+view = Blueprint("view", __name__)
 secret = os.urandom(16)
 url_timestamp = {}
 url_viewtime = {}
@@ -44,8 +46,7 @@ def send_url():
     params = resp_json.decode()
     url = params.replace("url=", "")
     parent_url = url_strip(url)
-    first = Node('print("currently viewing: " + parent_url)')
-    q.enqueue(first)
+    print("currently viewing: " + parent_url)
 
     if parent_url not in url_timestamp.keys():
         url_viewtime[parent_url] = 0
@@ -58,33 +59,20 @@ def send_url():
         for key in url_viewtime:
             url_viewtime[key] = 0
         start = True
-        
+    
     x = int(time.time())
     url_timestamp[parent_url] = x
     prev_url = parent_url
-    second = Node('print("final timestamps: ", url_timestamp)')
-    q.enqueue(second)
-    third = Node('print("final viewtimes: ", url_viewtime)')
-    q.enqueue(third)
+    print("final timestamps: ", url_timestamp)
+    print("final viewtimes: ", url_viewtime)
     all_data = {"date" : current_date, "Websites":url_viewtime}
     if start:
-        fourth = Node('user_collection.insert_one(all_data)')
-        q.enqueue(fourth)
-        fifth = Node('hold.inserted_id')
-        q.enqueue(fifth)
+        hold = user_collection.insert_one(all_data)
+        initial = hold.inserted_id
         start = False
     else:
-        fourth = Node('user_collection.update({"_id": initial}, {"date": current_date, "Websites":url_viewtime})')
-        q.enqueue(fourth)
-    while len(q) != 0:
-        current = exec(q.dequeue())
-        print(current)
-        if current == hold.inserted_id:
-            initial = current
-        hold = current
+        user_collection.update({"_id": initial}, {"date": current_date, "Websites":url_viewtime})
 
-        
-    
     return jsonify({'message': 'success!'}), 200
 
 @app.route('/quit_url', methods=["POST"])
